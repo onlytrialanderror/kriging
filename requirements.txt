@@ -1,0 +1,6 @@
+numpy
+matplotlib
+gstools
+
+ipython
+ipykernel
