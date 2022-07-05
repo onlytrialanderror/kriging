@@ -1,6 +1,7 @@
 numpy
 matplotlib
 gstools
+lhsmdu
 
 ipython
 ipykernel
