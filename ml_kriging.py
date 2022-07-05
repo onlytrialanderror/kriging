@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import gstools as gs
+import lhsmdu as lhs
 
 #kriging_type "simple" / "ordinary" /"universal_linear" / "universal_quadratic"
 def calculateKrigingModel(kriging_type, model_in, x_in, y_in, z_in):
@@ -393,11 +394,28 @@ def getInitPoints(selection_type, n, min_x,max_x, min_y,max_y):
         return getCenteredRandomGridCombinedPoints(n, min_x,max_x, min_y,max_y)
     elif selection_type == "CenteredRandomGridCombinedPointsWithEdges":
         return getCenteredRandomGridCombinedPointsWithEdges(n, min_x,max_x, min_y,max_y)
+    elif selection_type == "LHS":
+        return getLHSPoints(n, min_x,max_x, min_y,max_y)
+    elif selection_type == "MC":
+        return getLHSPoints(n, min_x,max_x, min_y,max_y)
     else:
         return getRandomPoints(n, min_x,max_x, min_y,max_y)
 
     return []
 
+#latice hypercube sampling
+def getLHSPoints(n, min_x,max_x, min_y,max_y):
+    l = lhs.sample(2,n) # Latin Hypercube Sampling of two variables, and n samples each.
+    x_p = np.squeeze(np.asarray(min_x + l[0]*(max_x-min_x)))
+    y_p = np.squeeze(np.asarray(min_y + l[1]*(max_y-min_y)))
+    return x_p, y_p
+
+#monte carlo sampling
+def getMCPoints(n, min_x,max_x, min_y,max_y):
+    k = lhs.createRandomStandardUniformMatrix(2,n) # Monte Carlo Sampling
+    x_p = np.squeeze(np.asarray(min_x + k[0]*(max_x-min_x)))
+    y_p = np.squeeze(np.asarray(min_y + k[1]*(max_y-min_y)))
+    return x_p, y_p
 
 def plotFunction2D(f, ax):
 
